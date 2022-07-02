@@ -1,24 +1,36 @@
 ﻿using InsideLogger;
 using System;
-using System.Threading.Tasks;
+using System.IO;
+using System.Text;
 
 namespace InsideLog
 {   
     public class InsideLogger
     {
-
+        //Асинхронный вывод информации в консоль
         public async void InfoAsync<T>(T text)
         {
             string TextTime = $"{DateTime.Now}|{text}";
             TextTime.Split("");
             await Console.Out.WriteLineAsync(TextTime);
         }
-
+        //Асинхронный вывод информации в консоль
         public async void InfoAsync()
         {
            await Console.Out.WriteLineAsync();
         }
 
+         public async void WriteDataFileAsync(string TextToFile, string File)
+        {
+            using (FileStream FileSteaming = new FileStream(File, FileMode.OpenOrCreate))
+            {
+                byte[] buffer = Encoding.Default.GetBytes(TextToFile);
+                await FileSteaming.WriteAsync(buffer, 0, buffer.Length);
+            }
+        }
+
+
+        //Асинхронный вывод информации в консоль с цветом
         public async void InfoAsync<T>(T text, Color color)
         {
             switch (color)
@@ -92,33 +104,42 @@ namespace InsideLog
             }
             Console.ResetColor();
         }
-
+        //Асинхронный вывод ошибки в консоль
         public async void ErrorAsync<T>(T TextError)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             await Console.Out.WriteLineAsync($"{DateTime.Now}|{TextError}");
             Console.ResetColor();
         }
-
+        //Асинхронный вывод предупреждения в консоль
         public async void WarningAsync<T>(T TextWarning)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             await Console.Out.WriteLineAsync($"{DateTime.Now}|{TextWarning}");
             Console.ResetColor();
         }
-
+        //Вывод информации в консоль
         public void Info<T>(T text)
         {
             string TextTime = $"{DateTime.Now}|{text}";
             TextTime.Split("");
             Console.WriteLine(TextTime);
         }
-
+        //Вывод информации в консоль
         public void Info()
         {
             Console.WriteLine();
         }
-
+        //Запись информации в файл
+        public void WriteDataFile(string TextToFile, string File)
+        {
+            using (FileStream FileSteaming = new FileStream(File, FileMode.OpenOrCreate))
+            {
+                byte[] buffer = Encoding.Default.GetBytes(TextToFile);
+                FileSteaming.Write(buffer, 0, buffer.Length);
+            }
+        }
+        //Вывод информации в консоль с цветом
         public void Info<T>(T text, Color color)
         {
             switch (color)
@@ -192,14 +213,14 @@ namespace InsideLog
             }
             Console.ResetColor();           
         }
-
+        //Вывод ошибки в консоль
         public void Error<T>(T TextError)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"{DateTime.Now}|{TextError}");
             Console.ResetColor();
         }
-
+        //Вывод предупреждения в консоль
         public void Warning<T>(T TextWarning)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
